@@ -2,7 +2,7 @@
 
 from msf.core.templates import Templates
 from msf.config import CONFIG
-# from w2a.lib.net.http import HTTP
+# from msf.lib.net.http import HTTP
 
 from urllib.parse import quote_plus
 class Module(Templates):

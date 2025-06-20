@@ -2,7 +2,7 @@
 #  Copyright 2012 Kid :">
 
 from msf.core.templates import Templates
-# from w2a.lib.net.http import HTTP
+# from msf.lib.net.http import HTTP
 
 from re import search
 

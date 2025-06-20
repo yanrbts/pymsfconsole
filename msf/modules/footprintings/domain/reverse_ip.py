@@ -3,7 +3,7 @@
 #  Copyright 2012 VinaKid :">
 
 from msf.core.templates import Templates
-# from w2a.lib.net.http import HTTP
+# from msf.lib.net.http import HTTP
 from msf.config import CONFIG
 from msf.lib.thread import Thread
 from msf.lib.dbconnect import IPInSerter, getDomain, getIP

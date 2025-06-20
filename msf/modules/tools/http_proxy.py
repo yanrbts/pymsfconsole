@@ -5,7 +5,7 @@
 
 from msf.core.templates import Templates
 from msf.lib.thread import Thread
-# from w2a.lib.net.http import HTTP
+# from msf.lib.net.http import HTTP
 from msf.lib import socket
 from msf.config import CONFIG
 

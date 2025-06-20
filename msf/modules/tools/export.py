@@ -3,7 +3,7 @@
 
 
 from msf.core.templates import Templates
-# from w2a.config import CONFIG
+# from msf.config import CONFIG
 from msf.lib.file import full_path, read_from_file, write_to_file
 
 class Module(Templates):

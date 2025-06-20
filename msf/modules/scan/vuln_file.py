@@ -3,7 +3,7 @@
 #  Copyright 2012 Kid :">
 
 from msf.core.templates import Templates
-# from w2a.lib.net.http import HTTP
+# from msf.lib.net.http import HTTP
 from msf.config import CONFIG
 from msf.lib.file import full_path, read_from_file
 from msf.lib.thread import Thread

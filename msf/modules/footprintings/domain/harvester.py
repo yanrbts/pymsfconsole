@@ -25,9 +25,9 @@ class Module(Templates):
         self.detailed_description = 	\
             '\tModule is using to get subdomain and email of domains\n' + \
             ' by bruteforce subdomain or from search engineer\n' +\
-            '	$ w2a > set DOMAIN google,bing,yahoo\n' +\
-            '	$ w2a > unset DOMAIN\n' +\
-            '	$ w2a > set DOMAINLIST [path to domain list])\n' +\
+            '	$ msf > set DOMAIN google,bing,yahoo\n' +\
+            '	$ msf > unset DOMAIN\n' +\
+            '	$ msf > set DOMAINLIST [path to domain list])\n' +\
             '- Option TYPE: speed\n' +\
             '- Option SUBLIST: path of subdomain list is using to bruteforce subdomain\n'
 
