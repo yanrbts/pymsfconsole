@@ -1,2 +1,4 @@
 requests
 importlib
+pandas
+urllib3
