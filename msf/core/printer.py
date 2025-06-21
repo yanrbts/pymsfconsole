@@ -47,3 +47,6 @@ def color_status(str):
 
 def color_success(str):
 	return '\033[0;32m'+str +'\033[0;m'
+
+def color_red(text):
+    return f"\033[91m{text}\033[0m"  # Red

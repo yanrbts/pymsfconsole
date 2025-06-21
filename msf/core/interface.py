@@ -10,7 +10,7 @@ from msf.config import CONFIG
 from msf.lib.file import full_path
 from .core import Framework
 from .options import Options
-from .printer import color_status, color_success, print_error
+from .printer import color_status, color_success, print_error, color_red
 
 
 # check readline module, available for tab
@@ -439,3 +439,60 @@ class Interface(OverrideCmd):
     def do_banner(self, args):
         """Print the banner"""
         self.print_line(self.intro)
+    
+    def do_search(self, key):
+        """Search for a module"""
+
+        findmodules = [
+            module_name for module_name in self.frmwk.modules.keys()
+            if key in module_name
+        ]
+
+        if len(findmodules) == 0:
+            self.print_line(color_success('No modules found.'))
+            return
+        
+        self.print_line(os.linesep + color_success('Modules') +
+                            os.linesep + '=======' + os.linesep)
+        longest_name = 20
+        
+        for module_name in findmodules:
+            longest_name = max(longest_name, len(module_name))
+
+        fmt_string = "  {0:" + str(longest_name) + "} {1}"
+        self.print_line(color_status(
+            fmt_string.format('Name', 'Description')))
+        self.print_line(fmt_string.format('----', '-----------'))
+
+        # module_names = sorted(findmodules)
+        # for module_name in module_names:
+        #     module_obj = self.frmwk.modules[module_name]
+        #     self.print_line(fmt_string.format(
+        #         module_name, module_obj.description))
+        # self.print_line('')
+        # return
+
+        # Print each module
+        for module_name in sorted(findmodules):
+            module_obj = self.frmwk.modules[module_name]
+            colored_name = ""
+            start_index = 0
+
+            # Highlight all instances of the keyword
+            lower_name = module_name.lower()
+            lower_key = key.lower()
+            while True:
+                idx = lower_name.find(lower_key, start_index)
+                if idx == -1:
+                    break
+                colored_name += module_name[start_index:idx]
+                colored_name += color_red(module_name[idx:idx + len(key)])
+                start_index = idx + len(key)
+            colored_name += module_name[start_index:]
+
+            # Pad to align with longest name
+            padding = ' ' * (longest_name - len(module_name))
+            self.print_line(f"  {colored_name}{padding} {module_obj.description}")
+
+        self.print_line('')
+        return

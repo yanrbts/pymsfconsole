@@ -78,10 +78,26 @@ class Module(Templates):
         self.f5_version = pd.DataFrame(pd.read_csv(self.options['VERSION_TABLE'])) if self.options['VERSION_TABLE'] else []
 
         self.frmwk.print_status('Starting CVE-2022-1388 scanner')
-        self.scan_target(self.url, self.all)
+
+        # Group, sort, serialize, and print results.
+        matches = self.scan_target(self.url, self.all)
+        if not matches.empty:
+            self.frmwk.print_status(
+                json.dumps(
+                    matches.groupby(["version", "precision"])
+                    .first()
+                    .sort_values(
+                        ["precision"], key=lambda x: x.map({"exact": 0, "approximate": 1})
+                    )
+                    .reset_index()
+                    .to_dict("records")
+                )
+            )
+        else:
+            self.frmwk.print_status("[]")
     def get_mtime_headers(self, target: str, resource: str) -> dict:
         url = urllib.parse.urljoin(target, resource)
-
+        self.frmwk.print_status(f"requesting {url}")
         try:
             resp = requests.get (
                 url,
@@ -105,9 +121,11 @@ class Module(Templates):
             requests.exceptions.SSLError,
             requests.exceptions.ConnectionError,
         ) as e:
+            self.frmwk.print_error(f"could not connect to target: {type(e).__name__}")
             return {}
         # Otherwise, if the resource simply doesn't exist, keep moving.
         except (requests.exceptions.HTTPError, requests.exceptions.ReadTimeout) as e:
+            self.frmwk.print_error({type(e).__name__})
             return {}
     
     # Check target for the presence of each static resource.
@@ -136,8 +154,8 @@ class Module(Templates):
                     delta = datetime.timedelta(hours=27)
                     approx = self.f5_version[
                         (self.f5_version["modification_time"] != mtime)
-                        & (self.versions["modification_time"] >= mtime - delta)
-                        & (self.versions["modification_time"] <= mtime + delta)
+                        & (self.f5_version["modification_time"] >= mtime - delta)
+                        & (self.f5_version["modification_time"] <= mtime + delta)
                     ]
                     approx["precision"] = "approximate"
 
